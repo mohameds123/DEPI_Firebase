@@ -1,3 +1,4 @@
+import 'package:depi/presentation/screens/Login_screen.dart';
 import 'package:depi/presentation/screens/signup_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,6 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SignupScreen());
+        home: LoginScreen());
   }
 }

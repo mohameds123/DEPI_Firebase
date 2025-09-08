@@ -1,6 +1,8 @@
+import 'package:depi/core/utils/colors_manager.dart';
 import 'package:depi/data/note_model.dart';
 import 'package:depi/logic/create_note/cubit.dart';
 import 'package:depi/logic/create_note/state.dart';
+import 'package:depi/presentation/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -122,7 +124,7 @@ class CreateNote extends StatelessWidget {
                   height: 50,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Color(0xff4E55D7),
+                    color: ColorsManager.primary,
                   ),
                   child: Text(
                     'Select Media',
@@ -135,31 +137,12 @@ class CreateNote extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              InkWell(
-                onTap: () {
-                  context.read<CreateNoteCubit>().createNoteData(notes: NoteModel(
-                      description: descriptionController.text,
-                      headline: headlineController.text,
-                      postTime: DateTime.now()));
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Color(0xff4E55D7),
-                  ),
-                  child: (state is CreateNoteLoadingState) ? Center(child: CircularProgressIndicator()) : Text(
-                    'Create',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
+              (state is CreateNoteLoadingState) ? Center(child: CircularProgressIndicator()) : AppButton(function: (){
+                context.read<CreateNoteCubit>().createNoteData(notes: NoteModel(
+                    description: descriptionController.text,
+                    headline: headlineController.text,
+                    postTime: DateTime.now()));
+              }, txt: "Create")
             ],
           ),
         ),

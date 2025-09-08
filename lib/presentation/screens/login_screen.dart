@@ -1,6 +1,8 @@
+import 'package:depi/core/utils/colors_manager.dart';
 import 'package:depi/logic/login/cubit.dart';
 import 'package:depi/logic/login/state.dart';
 import 'package:depi/presentation/screens/Login_screen.dart';
+import 'package:depi/presentation/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -133,28 +135,9 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 22),
-              InkWell(
-                onTap: (){
-                  context.read<LoginCubit>().login(email: emailController.text, pass: passwordController.text);
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Color(0xff4E55D7),
-                  ),
-                  child:(state is LoginLoadingState) ? Center(child: CircularProgressIndicator()) : Text(
-                    'Continue',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
+              (state is LoginLoadingState)? Center(child: CircularProgressIndicator()) : AppButton(function: (){
+               context.read<LoginCubit>().login(email: emailController.text, pass: passwordController.text);
+             }, txt: "Continue"),
               SizedBox(height: 32),
               Center(
                 child: Row(

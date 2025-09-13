@@ -13,9 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-      GetNotesCubit()
-        ..getNotes(),
+      create: (context) => GetNotesCubit()..getNotes(),
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -52,9 +50,9 @@ class HomeScreen extends StatelessWidget {
 
               BlocBuilder<GetNotesCubit, GetNoteStates>(
                 builder: (context, state) {
-                  if(state is GetNoteLoadingState){
+                  if (state is GetNoteLoadingState) {
                     return Center(child: CircularProgressIndicator());
-                  }else if (state is GetNoteSuccessState){
+                  } else if (state is GetNoteSuccessState) {
                     return SizedBox(
                       height: 370,
                       child: ListView.builder(
@@ -88,7 +86,10 @@ class HomeScreen extends StatelessWidget {
                                           style: TextStyle(),
                                         ),
                                         Spacer(),
-                                        Text("${state.notes[index].postTime.hour}:${state.notes[index].postTime.minute}${state.notes[index].postTime.hour >= 12 ? "PM" : "AM"}".toString()),
+                                        Text(
+                                          "${state.notes[index].postTime.hour}:${state.notes[index].postTime.minute}${state.notes[index].postTime.hour >= 12 ? "PM" : "AM"}"
+                                              .toString(),
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -99,10 +100,10 @@ class HomeScreen extends StatelessWidget {
                         },
                       ),
                     );
-                  }else if (state is GetNoteErrorState){
+                  } else if (state is GetNoteErrorState) {
                     return Center(child: Text(state.em));
-                  }return SizedBox();
-
+                  }
+                  return SizedBox();
                 },
               ),
             ],

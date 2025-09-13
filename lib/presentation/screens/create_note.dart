@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:depi/core/utils/colors_manager.dart';
 import 'package:depi/data/note_model.dart';
 import 'package:depi/logic/create_note/cubit.dart';
@@ -5,14 +7,39 @@ import 'package:depi/logic/create_note/state.dart';
 import 'package:depi/presentation/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'home_screen.dart';
 
-class CreateNote extends StatelessWidget {
+class CreateNote extends StatefulWidget {
   CreateNote({super.key});
 
+  @override
+  State<CreateNote> createState() => _CreateNoteState();
+}
+
+class _CreateNoteState extends State<CreateNote> {
   TextEditingController headlineController = TextEditingController();
+
   TextEditingController descriptionController = TextEditingController();
+
+XFile ? selectedMedia;
+
+  Future selectMediaGallery () async {
+    ImagePicker picker = ImagePicker();
+    selectedMedia = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+
+    });
+  }
+
+  Future selectMediaCamera () async {
+    ImagePicker picker = ImagePicker();
+    selectedMedia = await picker.pickImage(source: ImageSource.camera);
+    setState(() {
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +79,7 @@ class CreateNote extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-            
+
               SizedBox(
                 height: 50,
                 child: TextField(
@@ -65,7 +92,7 @@ class CreateNote extends StatelessWidget {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Color(0xffE1E1E1), width: 1),
                     ),
-            
+
                     hintText: 'Enter Note Address',
                     hintStyle: TextStyle(
                       color: Color(0xffB3B3B3),
@@ -84,7 +111,7 @@ class CreateNote extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-            
+
               SizedBox(
                 height: 190,
                 child: TextField(
@@ -102,7 +129,7 @@ class CreateNote extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(color: Color(0xffE1E1E1), width: 1),
                     ),
-            
+
                     hintText: 'Enter Your Description',
                     hintStyle: TextStyle(
                       color: Color(0xffB3B3B3),
@@ -112,12 +139,81 @@ class CreateNote extends StatelessWidget {
                   ),
                 ),
               ),
-            
+
               //Spacer(),
               SizedBox(height: 10),
+             selectedMedia != null? Image.file(File(selectedMedia!.path)):SizedBox(height: 10),
+              selectedMedia != null ? SizedBox(height: 10,) : SizedBox(height: 0,),
 
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  showDialog(context: context, builder: (BuildContext context){
+                    return AlertDialog(
+                      content: Container(
+                        height: 140,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+
+                              child: Container(
+                                width: 160,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: ColorsManager.primary,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text("Camera",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                  ),
+                                ),
+                              ),
+                              onTap: (){
+                                selectMediaCamera();
+                                Navigator.pop(context);
+                              },
+                            ),
+                            SizedBox(
+                              height: 12,
+                            ),
+                            InkWell(
+
+                              child: Container(
+                                width: 160,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: ColorsManager.primary,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text("Gallery",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              onTap: (){
+                                selectMediaGallery();
+                                Navigator.pop(context);
+
+                              },
+                            ),
+
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+
+                },
                 child: Container(
                   alignment: Alignment.center,
                   width: double.infinity,

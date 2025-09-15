@@ -3,6 +3,7 @@ import 'package:depi/logic/login/cubit.dart';
 import 'package:depi/logic/login/state.dart';
 import 'package:depi/presentation/screens/Login_screen.dart';
 import 'package:depi/presentation/widgets/button.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,6 +13,15 @@ class LoginScreen extends StatelessWidget {
    LoginScreen({super.key});
   TextEditingController emailController  = TextEditingController();
   TextEditingController passwordController  = TextEditingController();
+
+  void toggleLang (BuildContext context) {
+    final currentLang = context.locale;
+    if(currentLang.languageCode == "en") {
+      context.setLocale(Locale("ar"));
+    }else {
+      context.setLocale(Locale("en"));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +47,16 @@ class LoginScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 100),
+              IconButton(onPressed: (){toggleLang(context);}, icon: Icon(Icons.language,color: ColorsManager.primary,)),
               Center(
                 child: Text(
-                  'Login',
+                  'Login'.tr(),
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                 ),
               ),
               SizedBox(height: 50),
               Text(
-                'Your Email',
+                'Your Email'.tr(),
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 16,

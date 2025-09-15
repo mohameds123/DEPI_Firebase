@@ -5,6 +5,7 @@ import 'package:depi/data/note_model.dart';
 import 'package:depi/logic/create_note/cubit.dart';
 import 'package:depi/logic/create_note/state.dart';
 import 'package:depi/presentation/widgets/button.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,6 +25,18 @@ class _CreateNoteState extends State<CreateNote> {
   TextEditingController descriptionController = TextEditingController();
 
 XFile ? selectedMedia;
+
+Future <String?> uploadMedia ()async{
+  try {
+   final media =  FirebaseStorage.instance.ref().child("DIBI/");
+   await media.putFile(File(selectedMedia!.path));
+   return await media.getDownloadURL();
+
+  }catch (e){
+    print (e);
+  }
+
+}
 
   Future selectMediaGallery () async {
     ImagePicker picker = ImagePicker();
@@ -233,7 +246,19 @@ XFile ? selectedMedia;
                 ),
               ),
               SizedBox(height: 10),
-              (state is CreateNoteLoadingState) ? Center(child: CircularProgressIndicator()) : AppButton(function: (){
+              (state is CreateNoteLoadingState) ? Center(child: CircularProgressIndicator()) : AppButton(
+                  function: ()async{
+                    if(selectedMedia != null) {
+                    final uploadUrl =   await uploadMedia();
+                    context.read<CreateNoteCubit>().createNoteData(notes: NoteModel(
+                        description: descriptionController.text,
+                        headline: headlineController.text,
+                        postTime: DateTime.now(),
+                    mediaLink: uploadUrl,
+                    ));
+
+                    }
+
                 context.read<CreateNoteCubit>().createNoteData(notes: NoteModel(
                     description: descriptionController.text,
                     headline: headlineController.text,

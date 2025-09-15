@@ -77,6 +77,7 @@ class HomeScreen extends StatelessWidget {
                                   children: [
                                     Text(state.notes[index].headline),
                                     SizedBox(height: 8),
+                                    state.notes[index].mediaLink!= null ? Image.network(state.notes[index].mediaLink!) : SizedBox(),
                                     Row(
                                       children: [
                                         Text(
